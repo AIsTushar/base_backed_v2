@@ -10,7 +10,7 @@ if (!fs.existsSync(UPLOAD_ROOT)) {
   fs.mkdirSync(UPLOAD_ROOT, { recursive: true });
 }
 
-// 🧠 Helper to save a single file
+// Helper to save a single file
 export const saveFileFromMemory = (
   file: Express.Multer.File,
   folder = ""
@@ -41,7 +41,7 @@ export const saveFileFromMemory = (
   return fileUrl;
 };
 
-// 🧠 Helper to save multiple files
+// Helper to save multiple files
 export const saveMultipleFilesFromMemory = (
   files: Express.Multer.File[],
   folder = ""

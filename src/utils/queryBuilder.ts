@@ -119,6 +119,7 @@ class QueryBuilder<T> {
     return this;
   }
 
+  // Nested Filter
   nestedFilter(nestedFilters: NestedFilter[]) {
     nestedFilters.forEach(({ key, searchOption, queryFields }) => {
       const pathSegments = key.split(".");
@@ -201,6 +202,68 @@ class QueryBuilder<T> {
         };
       }
     });
+
+    return this;
+  }
+
+  // For single nested relation multiple select (not array)
+  multiSelectNestedArray(
+    filters: { field: string; relation: string; matchField?: string }[]
+  ) {
+    filters.forEach(({ field, relation, matchField = "slug" }) => {
+      const rawValue = this.query[field];
+      if (!rawValue) return;
+
+      let values: string[] = [];
+
+      if (Array.isArray(rawValue)) {
+        values = rawValue;
+      } else if (typeof rawValue === "string" && rawValue.includes(",")) {
+        values = rawValue.split(",");
+      } else if (typeof rawValue === "string") {
+        values = [rawValue];
+      }
+
+      if (values.length > 0) {
+        this.prismaQuery.where = {
+          ...this.prismaQuery.where,
+          [relation]: {
+            [matchField]: {
+              in: values,
+              mode: "insensitive",
+            },
+          },
+        };
+      }
+    });
+
+    return this;
+  }
+
+  // Array Filter
+  arrayFieldHasSome(fields: string[]) {
+    for (const field of fields) {
+      const rawValue = this.query[field];
+
+      if (!rawValue) continue;
+
+      let values: string[] = [];
+
+      if (Array.isArray(rawValue)) {
+        values = rawValue;
+      } else if (typeof rawValue === "string" && rawValue.includes(",")) {
+        values = rawValue.split(",");
+      } else if (typeof rawValue === "string") {
+        values = [rawValue];
+      }
+
+      this.prismaQuery.where = {
+        ...this.prismaQuery.where,
+        [field]: {
+          hasSome: values,
+        },
+      };
+    }
 
     return this;
   }
