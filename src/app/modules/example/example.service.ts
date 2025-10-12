@@ -49,8 +49,6 @@ const updateExample = async (req: Request) => {
 	const user = req.user;
 	const role = user?.role;
 
-	
-
 	const whereClause: Prisma.ExampleWhereUniqueInput = {
 		id,
 		...(role === "-----" ? { userId: user.id } : {}),
