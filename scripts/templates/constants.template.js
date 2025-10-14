@@ -14,6 +14,18 @@ export const ${camel}NestedFilters: NestedFilter[] = [
 
 ];
 
+// Array-based filtering
+export const ${camel}ArrayFilterFields = [];
+
+// Array-based filtering with multiple select not array
+export const ${camel}MultiSelectNestedArrayFilters = [
+  // {
+  //   field: "option",
+  //   relation: "option",
+  //   matchField: "name",
+  // },
+];
+
 // Range-based filtering config
 export const ${camel}RangeFilter: rangeFilteringPrams[] = [
 	{

@@ -26,6 +26,8 @@ model User {
   updatedAt        DateTime        @updatedAt
   receiver         Notifications[] @relation("receiverDetails")
   sender           Notifications[] @relation("senderDetails")
+
+  @@map("users")
 }
 
 model Otp {
@@ -50,14 +52,6 @@ model Notifications {
   updatedAt  DateTime @updatedAt
   receiver   User     @relation("receiverDetails", fields: [receiverId], references: [id])
   sender     User?    @relation("senderDetails", fields: [senderId], references: [id])
-}
-
-model Example {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  price     Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 enum Role {

@@ -11,6 +11,9 @@ import {
 	${camel}NestedFilters,
 	${camel}RangeFilter,
 	${camel}SearchFields,
+	${camel}MultiSelectNestedArrayFilters,
+	${camel}ArrayFilterFields
+
 } from "./${camel}.constant";
 import config from "../../../config";
 import { StatusCodes } from "http-status-codes";
@@ -31,6 +34,8 @@ const get${pascal}s = async (req: Request) => {
 	const results = await queryBuilder
 		.filter(${lower}FilterFields)
 		.search(${lower}SearchFields)
+		.arrayFieldHasSome(${lower}ArrayFilterFields)
+    .multiSelectNestedArray(${lower}MultiSelectNestedArrayFilters)
 		.nestedFilter(${lower}NestedFilters)
 		.sort()
 		.paginate()

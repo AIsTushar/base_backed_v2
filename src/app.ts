@@ -5,17 +5,15 @@ import router from "./app/route/route";
 import GlobalErrorHandler from "./app/middleware/globalErrorHandler";
 import { MongoClient } from "mongodb";
 import { StatusCodes } from "http-status-codes";
-import { PrismaConnection } from "./app/DB/PrismaConnection";
 import path from "path";
 import fs from "fs";
 import morgan from "morgan";
-import { title } from "process";
 
 export const myCache = new NodeCache({ stdTTL: 300 });
 const app = express();
 
 export const corsOptions = {
-  origin: ["http://localhost:3000", "https://dashboard.mrphrenfix.com"],
+  origin: ["http://localhost:3000"],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,

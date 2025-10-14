@@ -95,17 +95,28 @@ class QueryBuilder<T> {
   }
 
   // Filter
+  // Filter
   filter(includeFeilds: string[] = []) {
     const queryObj = this.pick(includeFeilds);
 
     // if (Object.keys(queryObj).length === 0) return this;
 
     const formattedFilters: Record<string, any> = {};
+
+    // Define known boolean fields here
+    const booleanFields = ["isActive", "isPublished"];
+
     for (const [key, value] of Object.entries(queryObj)) {
       if (typeof value === "string" && value.includes("[")) {
         const [field, operator] = key.split("[");
         const op = operator.slice(0, -1); // Remove the closing ']'
         formattedFilters[field] = { [op]: parseFloat(value as string) };
+      } else if (
+        booleanFields.includes(key) &&
+        (value === "true" || value === "false")
+      ) {
+        // ✅ Convert known boolean strings to actual booleans
+        formattedFilters[key] = value === "true";
       } else {
         formattedFilters[key] = value;
       }
