@@ -50,8 +50,34 @@ const deleteS3Image = async (imagePath: string) => {
   }
 };
 
+const deleteFromS3ByUrl = async (fileUrl: string): Promise<void> => {
+  const bucketName = process.env.DO_SPACE_BUCKET;
+
+  if (!bucketName) {
+    throw new Error("S3 bucket name is not defined in the configuration.");
+  }
+
+  // Extract the key from the URL
+  try {
+    const url = new URL(fileUrl);
+    const key = url.pathname.slice(1);
+
+    const command = new DeleteObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+    });
+
+    await s3.send(command);
+    console.log(`File deleted successfully: ${key}`);
+  } catch (error) {
+    console.error("Error deleting file from S3:", error);
+    throw new Error(`Failed to delete file from S3: ${fileUrl}`);
+  }
+};
+
 export const deleteFile = {
   deleteUploadImage,
   deleteS3Image,
   deleteFileFromFolder,
+  deleteFromS3ByUrl,
 };

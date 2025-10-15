@@ -43,6 +43,14 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
+const localFileUploader = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+  fileFilter: fileFilter,
+});
+
 export const getImageUrl = async (file: Express.MulterS3.File) => {
   let image = file?.location;
   if (!image || !image.startsWith("http")) {
@@ -63,14 +71,10 @@ export const getImageUrls = async (files: Express.MulterS3.File[]) => {
 
 // Single image uploads
 const uploadProfileImage = upload.single("profileImage");
-const uploadFoodImages = upload.single("foodImage");
-const serviceImage = upload.single("serviceImage");
 
 // Multiple image uploads
-
 export const fileUploader = {
+  localFileUploader,
   upload,
   uploadProfileImage,
-  uploadFoodImages,
-  serviceImage,
 };
