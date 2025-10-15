@@ -54,6 +54,14 @@ model Notifications {
   sender     User?    @relation("senderDetails", fields: [senderId], references: [id])
 }
 
+model Example {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  image String
+
+  @@map("examples")
+}
+
 enum Role {
   USER
   ADMIN

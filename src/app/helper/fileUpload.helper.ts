@@ -1,50 +1,36 @@
-import fs from "fs";
+import fs from "fs/promises"; // ← use promises API
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import { slugify } from "../../utils/slugify";
 
 const UPLOAD_ROOT = path.join(process.cwd(), "uploads");
 
-// Ensure folder exists
-if (!fs.existsSync(UPLOAD_ROOT)) {
-  fs.mkdirSync(UPLOAD_ROOT, { recursive: true });
-}
-
-// Helper to save a single file
-export const saveFileFromMemory = (
+export const saveFileFromMemory = async (
   file: Express.Multer.File,
   folder = ""
-): string => {
+): Promise<string> => {
   if (!file) throw new Error("No file provided");
 
-  // Folder path (e.g. uploads/avatars)
   const folderPath = folder ? path.join(UPLOAD_ROOT, folder) : UPLOAD_ROOT;
+  await fs.mkdir(folderPath, { recursive: true });
 
-  // Ensure subfolder exists
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, { recursive: true });
-  }
-
-  // Create clean unique file name
   const ext = path.extname(file.originalname);
   const baseName = slugify(path.basename(file.originalname, ext));
   const uniqueName = `${baseName}-${uuidv4()}${ext}`;
 
-  // Write the file buffer to disk
   const filePath = path.join(folderPath, uniqueName);
-  fs.writeFileSync(filePath, file.buffer);
+  await fs.writeFile(filePath, file.buffer); // async write
 
-  // Return the URL (assuming you serve /uploads statically)
-  const fileUrl = `${process.env.BASE_URL || "http://localhost:5000"}/uploads${
+  const fileUrl = `${process.env.BASE_URL || "http://localhost:7000"}/uploads${
     folder ? "/" + folder : ""
   }/${uniqueName}`;
+
   return fileUrl;
 };
 
-// Helper to save multiple files
-export const saveMultipleFilesFromMemory = (
+export const saveMultipleFilesFromMemory = async (
   files: Express.Multer.File[],
   folder = ""
-): string[] => {
-  return files.map((file) => saveFileFromMemory(file, folder));
+): Promise<string[]> => {
+  return Promise.all(files.map((file) => saveFileFromMemory(file, folder)));
 };

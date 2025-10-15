@@ -43,7 +43,7 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
-const localFileUploader = multer({
+export const localFileUploader = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 1024 * 1024 * 5,
