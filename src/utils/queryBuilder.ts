@@ -94,6 +94,16 @@ class QueryBuilder<T> {
     return this;
   }
 
+  // select
+  select(fields: Record<string, boolean | object>) {
+    this.prismaQuery.select = {
+      ...this.prismaQuery.select,
+      ...fields,
+    };
+
+    return this;
+  }
+
   // Filter
   // Filter
   filter(includeFeilds: string[] = []) {

@@ -13,6 +13,7 @@ import {
 	${camel}SearchFields,
 	${camel}MultiSelectNestedArrayFilters,
 	${camel}ArrayFilterFields
+  ${camel}Select
 
 } from "./${camel}.constant";
 import config from "../../../config";
@@ -39,7 +40,8 @@ const get${pascal}s = async (req: Request) => {
 		.nestedFilter(${lower}NestedFilters)
 		.sort()
 		.paginate()
-		.include(${lower}Include)
+		.select(${lower}Select)
+		//.include(${lower}Include)
 		.fields()
 		.filterByRange(${lower}RangeFilter)
 		.execute();

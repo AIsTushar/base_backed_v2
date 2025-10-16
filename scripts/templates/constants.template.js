@@ -36,6 +36,11 @@ export const ${camel}RangeFilter: rangeFilteringPrams[] = [
 	},
 ];
 
+// Prisma select configuration
+export const ${camel}Select = {
+ 
+};
+
 // Prisma include configuration
 export const ${camel}Include = {
 	
