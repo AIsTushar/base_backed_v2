@@ -26,10 +26,7 @@ const logInFromDB = async (payload: {
   }
   const comparePassword = await compare(payload.password, findUser.password);
   if (!comparePassword) {
-    throw new ApiError(
-      StatusCodes.UNAUTHORIZED,
-      "Invalid password"
-    );
+    throw new ApiError(StatusCodes.UNAUTHORIZED, "Invalid password");
   }
 
   if (findUser.status === "PENDING" && !findUser.isVerified) {
@@ -98,7 +95,7 @@ const forgetPassword = async (payload: { email: string }) => {
     },
   });
   if (!findUser) {
-    throw new ApiError(StatusCodes.NOT_FOUND,"User not found");
+    throw new ApiError(StatusCodes.NOT_FOUND, "User not found");
   }
 
   OTPFn(findUser.email);
@@ -112,6 +109,7 @@ const resetOtpVerify = async (payload: { email: string; otp: number }) => {
 };
 
 const resendOtp = async (payload: { email: string }) => {
+  console.log("I am here");
   const findUser = await prisma.user.findUnique({
     where: {
       email: payload.email,
@@ -190,7 +188,7 @@ const socialLogin = async (payload: {
 };
 
 const resetPassword = async (payload: { token: string; password: string }) => {
-  const {email, exp } = jwtHelpers.tokenDecoder(payload.token) as JwtPayload;
+  const { email, exp } = jwtHelpers.tokenDecoder(payload.token) as JwtPayload;
 
   if (exp && exp < Date.now() / 1000) {
     throw new ApiError(StatusCodes.UNAUTHORIZED, "Token expired");
@@ -212,7 +210,7 @@ const resetPassword = async (payload: { token: string; password: string }) => {
     data: {
       password: hashedPassword,
     },
-    select : {
+    select: {
       id: true,
       name: true,
       email: true,
@@ -220,7 +218,7 @@ const resetPassword = async (payload: { token: string; password: string }) => {
       status: true,
       createdAt: true,
       updatedAt: true,
-    }
+    },
   });
   return result;
 };

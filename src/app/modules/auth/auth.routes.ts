@@ -25,10 +25,9 @@ route.post("/forget-otp-verify", authController.resetOtpVerifyController);
 
 route.post(
   "/resend-otp",
-  validateRequest(authValidation.verifyOtp),
+  validateRequest(authValidation.resendOtp),
   authController.resendOtpController
 );
-
 
 route.post("/reset-password", authController.resetPasswordController);
 
